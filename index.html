@@ -263,33 +263,48 @@ function drawDays(){
  }).join('');
  document.querySelectorAll('[data-day]').forEach(b=>b.onclick=()=>{selected=b.dataset.day;render()});
 }
+
 const CURATED_VIDEOS={
- bench:{url:'https://www.youtube.com/watch?v=QsYre__-aro',coach:'Jeremy Ethier',note:'덤벨 벤치프레스 실수 5가지 · 긴 설명 영상'},
- lat:{url:'https://www.youtube.com/watch?v=jLvqKgW-_G8&t=218s',coach:'Jeff Nippard',note:'3:38부터 와이드 랫풀다운 구간'},
- incline:{url:'https://www.youtube.com/watch?v=fGm-ef-4PVk&t=256s',coach:'Jeff Nippard',note:'4:16부터 인클라인 덤벨프레스 구간'},
- row:{url:'https://www.youtube.com/watch?v=jLvqKgW-_G8&t=562s',coach:'Jeff Nippard',note:'9:22부터 케이블로우 구간'},
- side:{url:'https://www.youtube.com/watch?v=SgyUoY0IZ7A&t=100s',coach:'Jeff Nippard',note:'1:40부터 덤벨 사이드 레터럴 레이즈'},
- curl:{url:'https://www.youtube.com/watch?v=GNO4OtYoCYk&t=217s',coach:'Jeff Nippard',note:'3:37부터 스탠딩 덤벨 컬'},
- press:{url:'https://www.youtube.com/watch?v=kIXcoivzGf8&t=350s',coach:'Jeff Nippard',note:'5:50부터 45도 레그프레스 · 수평형은 6:17'},
- legcurl:{url:'https://www.youtube.com/watch?v=EqCsK_vlnfE',coach:'Morgan (CPT)',note:'시티드 레그컬 머신 사용법 · 동작 직접 시연'},
- ext:{url:'https://www.youtube.com/watch?v=kIXcoivzGf8&t=425s',coach:'Jeff Nippard',note:'7:05부터 레그 익스텐션 구간'},
- abduct:{url:'https://www.youtube.com/watch?v=3ryh7PNhz3E&t=500s',coach:'Jeff Nippard',note:'8:20부터 앉아서 벌리는 머신 힙 어브덕션'},
- adduct:{url:'https://www.youtube.com/watch?v=8cp406VAcxM',coach:'한세트더',note:'한국어 설명 · 이너타이 머신 사용법'},
- bwcalf:{url:'https://www.youtube.com/watch?v=sexK3SlsOOQ',coach:'Breakthrough Football',note:'맨몸 종아리 들기 쇼츠 · 짧은 실습 영상'},
- shoulder:{url:'https://www.youtube.com/watch?v=SgyUoY0IZ7A&t=325s',coach:'Jeff Nippard',note:'5:25부터 덤벨 숄더프레스 구간'},
- pullup:{url:'https://www.youtube.com/watch?v=6i7adZVlwIk',coach:'Gerardi Performance',note:'어시스트 풀업 머신 세팅과 정확한 사용법'},
- triceps:{url:'https://www.youtube.com/watch?v=OpRMRhr0Ycc&t=60s',coach:'Jeff Nippard',note:'1:00부터 로프 푸시다운, 바는 2:09'},
- bridge:{url:'https://www.youtube.com/watch?v=3ryh7PNhz3E&t=283s',coach:'Jeff Nippard',note:'4:43부터 맨몸 글루트 브리지 구간'},
- arm:{url:'https://www.youtube.com/watch?v=GNO4OtYoCYk&t=612s',coach:'Jeff Nippard',note:'10:12부터 케이블 이두 컬 구간'}
+ bench:{url:'https://www.youtube.com/watch?v=QsYre__-aro',coach:'Jeremy Ethier',note:'덤벨 벤치프레스 · 자주 하는 실수와 교정'},
+ lat:{url:'https://www.youtube.com/watch?v=jLvqKgW-_G8&t=218s',coach:'Jeff Nippard',note:'3:38 와이드 랫풀다운 구간부터 재생'},
+ incline:{url:'https://www.youtube.com/watch?v=PEiIOW7HGnA',coach:'Jeff Nippard',note:'랫풀다운·인클라인 덤벨프레스 자세 실수 3가지'},
+ row:{url:'https://www.youtube.com/watch?v=jLvqKgW-_G8&t=562s',coach:'Jeff Nippard',note:'9:22 케이블 로우 구간부터 재생'},
+ side:{url:'https://www.youtube.com/watch?v=v_ZkxWzYnMc',coach:'Jeff Nippard 자료',note:'덤벨 레터럴 레이즈 · 운동별 고정 링크'},
+ curl:{url:'https://www.youtube.com/watch?v=GNO4OtYoCYk&t=217s',coach:'Jeff Nippard',note:'3:37 스탠딩 덤벨 컬 구간부터 재생'},
+ press:{url:'https://www.youtube.com/watch?v=kIXcoivzGf8&t=350s',coach:'Jeff Nippard',note:'5:50 레그프레스 시범, 기구 형태에 따라 세팅 차이'},
+ legcurl:{url:'https://www.youtube.com/watch?v=EqCsK_vlnfE',coach:'Morgan (CPT)',note:'시티드 레그컬 머신 세팅과 동작 시범'},
+ ext:{url:'https://www.youtube.com/watch?v=kIXcoivzGf8&t=425s',coach:'Jeff Nippard',note:'7:05 레그 익스텐션 구간부터 재생'},
+ abduct:{url:'https://www.youtube.com/watch?v=GmRSV_n2E_0',coach:'Jeff Nippard 참고',note:'시티드 힙 어브덕션(다리 벌리기) 시범'},
+ adduct:{url:'https://www.youtube.com/watch?v=8cp406VAcxM',coach:'한세트더',note:'한국어 이너타이/힙 어덕션 머신 설명'},
+ bwcalf:{url:'https://www.youtube.com/watch?v=sexK3SlsOOQ',coach:'Breakthrough Football',note:'맨몸 스탠딩 카프레이즈 쇼츠'},
+ shoulder:{url:'https://www.youtube.com/watch?v=SgyUoY0IZ7A&t=325s',coach:'Jeff Nippard',note:'5:25 덤벨 숄더프레스 구간부터 재생'},
+ pullup:{url:'https://www.youtube.com/watch?v=6i7adZVlwIk',coach:'Gerardi Performance',note:'어시스트 풀업 머신 세팅'},
+ triceps:{url:'https://www.youtube.com/watch?v=OpRMRhr0Ycc&t=60s',coach:'Jeff Nippard',note:'1:00 로프 푸시다운 구간부터 재생'},
+ hip:{url:'https://www.youtube.com/watch?v=dOn0cLh7Ek0&t=312s',coach:'Jeremy Ethier',note:'5:12 힙 쓰러스트 및 덤벨 대체 설명 구간'},
+ fly:{url:'https://www.youtube.com/watch?v=-EIhKMDSjBY&t=110s',coach:'Jeff Nippard 운동 자료',note:'케이블 플라이 시범(낮은 풀리 변형 포함). 사용 기구의 높이에 맞춰 조절'},
+ arm:{url:'https://www.youtube.com/watch?v=GNO4OtYoCYk&t=612s',coach:'Jeff Nippard',note:'10:12 케이블 이두 컬 구간부터 재생'}
 };
-const CHUL_VIDEO={url:'https://www.youtube.com/shorts/218J22-tZUE',coach:'황철순',note:'황철순 어깨 프레스 쇼츠 (세부 동작은 현재 덤벨프레스와 다를 수 있음)'};
-const CHUL_COACHING={url:'https://www.youtube.com/watch?v=W6OgWxiJw00',coach:'황철순',note:'황철순 선수 코칭 영상 · 어깨/둔근 복합 설명'};
-function workoutVideoUrl(id){return CURATED_VIDEOS[id]?.url||'';}
-function workoutVideoText(id){return '▶️ '+(CURATED_VIDEOS[id]?.coach||'')+' 운동 영상 바로 보기 ↗';}
-function workoutVideoNote(id){return (CURATED_VIDEOS[id]?.note||'')+' · 한국어 자막 제공 여부 미확인';}
-function workoutVideoExtra(id){if(id==='shoulder')return '<a class="second-video" href="'+CHUL_VIDEO.url+'" target="_blank" rel="noopener noreferrer">🎬 황철순 선수 어깨 프레스 쇼츠 보기 ↗</a><small>운동 종류와 기구가 다를 수 있어 보조 참고로만 이용</small>';if(id==='side'||id==='abduct')return '<a class="second-video" href="'+CHUL_COACHING.url+'" target="_blank" rel="noopener noreferrer">🎬 황철순 선수의 어깨·둔근 코칭 보기 ↗</a><small>여러 운동을 설명하는 영상이며 이 동작만 다루는 영상은 아닙니다.</small>';return '';}
+const CHUL_SPECIAL={
+ bench:{url:'https://www.youtube.com/watch?v=4qXNa-pTw7o',note:'황철순 선수 벤치프레스 기초 · 바벨 중심, 덤벨과 차이 있음'},
+ lat:{url:'https://www.youtube.com/shorts/ddXXgKDStiU',note:'황철순 선수 등 자극 팁 쇼츠 · 랫풀다운 전용 시범은 아님'},
+ row:{url:'https://www.youtube.com/shorts/ddXXgKDStiU',note:'황철순 선수 등 자극 팁 쇼츠 · 시티드로우 전용 시범은 아님'},
+ shoulder:{url:'https://www.youtube.com/shorts/218J22-tZUE',note:'황철순 선수 어깨 프레스 쇼츠 · 현재 덤벨 동작과 세부 형태 다를 수 있음'}
+};
+const KOREAN_SPECIAL={
+ side:{url:'https://www.youtube.com/watch?v=D1tb6rYgpDA',note:'한국어 사이드 레터럴 레이즈 자세 설명'}
+};
+function workoutVideoUrl(id){return CURATED_VIDEOS[id]?.url||''}
+function workoutVideoText(id){const v=CURATED_VIDEOS[id];return '▶️ '+(v?.coach||'트레이너')+' 운동법 바로 보기 ↗'}
+function workoutVideoNote(id){const v=CURATED_VIDEOS[id];return (v?.note||'')+' · 한국어 자막 확인 전(영상 설정의 자막/자동 번역을 확인)'}
+function workoutVideoExtra(id){
+ let content='';
+ if(CHUL_SPECIAL[id]){const v=CHUL_SPECIAL[id];content+='<a class="second-video" target="_blank" rel="noopener noreferrer" href="'+v.url+'">🎬 황철순 선수 코칭 영상 바로 보기 ↗</a><small>'+v.note+'</small>'}
+ if(KOREAN_SPECIAL[id]){const v=KOREAN_SPECIAL[id];content+='<a class="second-video" target="_blank" rel="noopener noreferrer" href="'+v.url+'">🇰🇷 한국어 운동법 영상 바로 보기 ↗</a><small>'+v.note+'</small>'}
+ return content
+}
 function videoLinkHTML(id,name){
- if(!CURATED_VIDEOS[id])return '<div class="video-pending">🎬 정확한 동작 영상 선정 중</div><small>기존 검색 결과를 임의로 연결하지 않습니다.</small>';
+ const v=CURATED_VIDEOS[id];
+ if(!v)return '<div class="video-pending">🎬 정확한 동작 영상 확인 중</div><small>확인되지 않은 영상을 검색 결과로 연결하지 않습니다.</small>';
  return '<a href="'+workoutVideoUrl(id)+'" target="_blank" rel="noopener noreferrer" aria-label="'+escapeHTML(name)+' 운동 영상 보기">'+workoutVideoText(id)+'</a><small>'+workoutVideoNote(id)+'</small>'+workoutVideoExtra(id);
 }
 function render(){drawDays();$('daytitle').textContent=PLAN[selected].name;const date=current();let html='',done=0,total=0;PLAN[selected].ex.forEach(([id,n,range],i)=>{const [name,setup,breath,feel,extra,type]=EX[id];const old=last(date,selected,id);let rows='';for(let j=0;j<n;j++){const rec=getRec(date,selected,id,j),prior=old?.[1]?.[selected]?.[id]?.[j]||{};if(rec.done)done++;total++;rows+=`<div class="setrow"><label>${j+1}세트</label><input aria-label="${name} ${j+1}세트 중량" class="num" inputmode="decimal" type="number" min="0" step="0.5" placeholder="${prior.kg??'kg'}" value="${escapeHTML(rec.kg??'')}" data-field="kg" data-id="${id}" data-index="${j}"><input aria-label="${name} ${j+1}세트 횟수" class="num" inputmode="numeric" type="number" min="0" step="1" placeholder="${prior.reps??'회'}" value="${escapeHTML(rec.reps??'')}" data-field="reps" data-id="${id}" data-index="${j}"><input aria-label="${name} ${j+1}세트 완료" type="checkbox" class="check" data-field="done" data-id="${id}" data-index="${j}" ${rec.done?'checked':''}></div>`}const complete=Array.from({length:n},(_,j)=>getRec(date,selected,id,j).done).filter(Boolean).length;const prev=old?`지난 기록 (${old[0]}): ${Object.entries(old[1][selected][id]).sort((a,b)=>Number(a[0])-Number(b[0])).map(([j,r])=>`${Number(j)+1}세트 ${r.kg??'-'}kg × ${r.reps??'-'}회`).join(' · ')}`:'이전 기록이 없습니다. 첫 기록을 남겨보세요.';html+=`<article class="exercise"><div class="exhead"><div class="ex-number">${i+1}</div><div class="ex-title"><div class="no">${n}세트 · ${range}회 <span class="number-index">${i+1}/${PLAN[selected].ex.length}</span></div><h3>${escapeHTML(name)}</h3></div><span class="tag">${i>=5?'선택 보완':'집중 운동'}</span></div><div class="visual-summary"><div class="hero" data-img="${id}">${figureForExercise(id,type)}<span class="imglabel">${DIAGRAM_IDS.has(id)?'동작 안내 그림 · 시작 / 끝':'자세 참고 이미지'}</span></div><div class="info"><strong>● 자세·세팅 요약</strong><p><b>세팅</b> ${setup}<br><b>자극</b> ${feel}<br><b>호흡</b> ${breath}</p></div></div><div class="video-link">${videoLinkHTML(id,name)}</div><details class="more"><summary>💡 자세 꿀팁·주의사항 더 보기</summary><div>${extra}</div></details><div class="sets"><div class="sethead"><span>세트</span><span>중량(kg)</span><span>횟수</span><span style="text-align:center">완료</span></div>${rows}<div class="progress"><span style="width:${complete/n*100}%"></span></div><div class="footerline"><span>${complete}/${n}세트 완료</span><span>${Math.round(complete/n*100)}% 달성</span></div></div><div class="prev"><b>↗ 이전 운동 기록</b><br>${escapeHTML(prev)}</div></article>`});$('exercises').innerHTML=html;$('dayprogress').textContent=`${done}/${total} 세트`;document.querySelectorAll('.setrow input').forEach(el=>{el.addEventListener(el.type==='checkbox'?'change':'input',()=>{const val=el.type==='checkbox'?el.checked:el.value;setRec(date,selected,el.dataset.id,Number(el.dataset.index),{[el.dataset.field]:val});updateProgress()})});refreshFigures()}
