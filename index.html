@@ -85,7 +85,7 @@ const PINNED_IMAGE_IDS=new Set(Object.keys(PINNED_EXERCISE_SLUGS));
 const PINNED_CDN_ROOT='https://cdn.jsdelivr.net/npm/@bryllim/workout-guide@1.0.0/assets/';
 const PINNED_GITHUB_ROOT='https://raw.githubusercontent.com/bryllim/workout-guide/main/packages/workout-guide/assets/';
 function pinnedPoseUrl(slug,frame,backup=false){
- return (backup?PINNED_GITHUB_ROOT:PINNED_CDN_ROOT)+slug+'/frame-'+frame+'.svg';
+ return (backup?PINNED_CDN_ROOT:PINNED_GITHUB_ROOT)+slug+'/frame-'+frame+'.svg';
 }
 Object.entries(PINNED_EXERCISE_SLUGS).forEach(([id,slug])=>{
  IMAGES[id]={start:pinnedPoseUrl(slug,1),peak:pinnedPoseUrl(slug,3),provider:'Workout Guide',slug};
