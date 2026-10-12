@@ -135,39 +135,35 @@ const IMAGES={};
 /* 9 individually verified, equipment-matched illustration pairs by Bryl Lim / Everkinetic,
    CC BY-SA 4.0. Original SVG files verified at https://github.com/bryllim/workout-guide.
    https://creativecommons.org/licenses/by-sa/4.0/ */
+
 const PINNED_EXERCISE_SLUGS={
- fly:'cable-fly',
- side:'lateral-raise',
- curl:'bicep-curl',
- legcurl:'seated-leg-curl',
- abduct:'hip-abduction-machine',
- adduct:'hip-adduction-machine',
- bwcalf:'calf-raise',
- pullup:'assisted-pull-up',
- triceps:'tricep-pushdown',
- bridge:'glute-bridge'
+ bench:'dumbbell-bench-press',lat:'lat-pulldown',incline:'incline-dumbbell-press',
+ row:'seated-row',side:'lateral-raise',curl:'bicep-curl',press:'leg-press',
+ legcurl:'seated-leg-curl',ext:'leg-extension',abduct:'hip-abduction-machine',
+ adduct:'hip-adduction-machine',bwcalf:'calf-raise',shoulder:'seated-dumbbell-press',
+ pullup:'assisted-pull-up',triceps:'tricep-pushdown',hip:'dumbbell-hip-thrust',
+ fly:'cable-fly',arm:'cable-curl'
 };
 const PINNED_IMAGE_IDS=new Set(Object.keys(PINNED_EXERCISE_SLUGS));
 const PINNED_CDN_ROOT='https://cdn.jsdelivr.net/npm/@bryllim/workout-guide@1.0.0/assets/';
 const PINNED_GITHUB_ROOT='https://raw.githubusercontent.com/bryllim/workout-guide/main/packages/workout-guide/assets/';
-function pinnedPoseUrl(slug,frame,backup=false){
- return (backup?PINNED_CDN_ROOT:PINNED_GITHUB_ROOT)+slug+'/frame-'+frame+'.svg';
-}
-Object.entries(PINNED_EXERCISE_SLUGS).forEach(([id,slug])=>{
- IMAGES[id]={start:pinnedPoseUrl(slug,1),peak:pinnedPoseUrl(slug,3),provider:'Workout Guide',slug};
-});
-/* Crops from the user's photorealistic AI design mockup; not verified exercise-form photographs. */
-const STUDIO_REFERENCE={
- hip:'assets/hip.webp',
- press:'assets/legpress.webp',
- legcurl:'assets/legcurl.webp'
+function pinnedPoseUrl(slug,frame,backup=false){return (backup?PINNED_CDN_ROOT:PINNED_GITHUB_ROOT)+slug+'/frame-'+frame+'.svg'}
+Object.entries(PINNED_EXERCISE_SLUGS).forEach(([id,slug])=>{IMAGES[id]={start:pinnedPoseUrl(slug,1),peak:pinnedPoseUrl(slug,3),provider:'Workout Guide',slug}});
+const REAL_PHOTOS={
+ bench:{id:11432959,who:'Marius Aholou'},lat:{id:29218860,who:'Michael Miguel'},
+ incline:{id:35986386,who:'Jessie Kiermayr'},curl:{id:7289304,who:'Alesia Kozik'},
+ press:{id:13965336,who:'Amar Preciado'},ext:{id:19722966,who:'Nikolay Veksharev'},
+ abduct:{id:6539861,who:'RDNE Stock project'},triceps:{id:13616289,who:'Carlos Mario'},
+ bwcalf:{id:13965339,who:'Amar Preciado'},
+ hip:{local:'assets/hip.webp',who:'AI 생성 운동 시안'},
+ legcurl:{local:'assets/legcurl.webp',who:'AI 생성 운동 시안'}
 };
-Object.entries(STUDIO_REFERENCE).forEach(([id,start])=>{
- IMAGES[id]={start,provider:'AI 생성 시안'};
- PINNED_IMAGE_IDS.add(id);
-});
-
-
+function exercisePhotoInfo(id){
+ const p=REAL_PHOTOS[id];if(!p)return null;
+ return p.local?{src:p.local,who:p.who,isAI:true,url:''}:{
+ src:'https://images.pexels.com/photos/'+p.id+'/pexels-photo-'+p.id+'.jpeg?auto=compress&cs=tinysrgb&w=1100',
+ who:p.who,isAI:false,url:'https://www.pexels.com/photo/'+p.id+'/'};
+}
 const PHOTO_ALIASES={
  bench:['dumbbell bench press','flat dumbbell press'],
  lat:['lat pulldown','lat pull down'],
@@ -187,54 +183,49 @@ function matchExercise(items,aliases){
  const normalized=x=>String(x||'').toLowerCase().replace(/[-_]/g,' ').replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
  return items.find(item=>{const n=normalized(item.name_en||item.name||item.id);return aliases.some(alias=>n===normalized(alias))})||null;
 }
+
 function refreshFigures(){
  document.querySelectorAll('.hero').forEach(el=>{
-  const id=el.dataset.img,photos=IMAGES[id];
-  if(!photos||el.querySelector('.pose-pair'))return;
-  const paths=[photos.start,photos.peak||photos.main].filter(Boolean);
-  if(!paths.length)return;
-  const wrap=document.createElement('div');wrap.className='pose-pair';
-  if(photos.provider==='Workout Guide')wrap.classList.add('licensed-photo-pair');
-  if(photos.provider==='AI 생성 시안')wrap.classList.add('studio-photo-pair');
-  paths.forEach((src,i)=>{
-   const img=document.createElement('img');
-   img.alt=EX[id][0]+' '+(i===0?'시작 자세':'끝 자세');
-   img.loading='lazy';img.decoding='async';
-   img.referrerPolicy='no-referrer';
-   img.onerror=()=>{
-    if(photos.provider==='Workout Guide'&&!img.dataset.backup){
-     img.dataset.backup='1';img.src=pinnedPoseUrl(photos.slug,i===0?1:3,true);return;
-    }
-    img.classList.add('broken');
-    if([...wrap.querySelectorAll('img')].every(x=>x.classList.contains('broken'))){
-     wrap.remove();
-     el.querySelector('.imglabel').textContent='이미지 연결 실패 · 아래 영상에서 동작 확인';
-    }
-   };
-   img.src=src;wrap.appendChild(img);
-  });
-  el.appendChild(wrap);
-  el.querySelector('.imglabel').textContent=photos.provider==='AI 생성 시안'?'실사형 AI 시안 · 동작은 설명·영상 확인':photos.provider==='Workout Guide'?'시작 / 끝 자세 · Workout Guide':'시작 / 끝 자세 · RepDB';
+  if(el.dataset.mediaReady==='yes')return;el.dataset.mediaReady='yes';
+  const id=el.dataset.img,media=IMAGES[id],photo=exercisePhotoInfo(id),label=el.querySelector('.imglabel');
+  if(!media&&!photo)return;
+  const switchMode=(mode)=>{
+   el.dataset.view=mode;
+   label.textContent=mode==='photo'?(photo.isAI?'AI 생성 실사형 시안 · 동작 탭 필수 확인':'실제 운동 장면 · Pexels'):'시작 / 끝 자세 · Workout Guide';
+   el.querySelectorAll('.media-switch button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===mode)));
+  };
+  if(media){
+   const pair=document.createElement('div');pair.className='pose-pair licensed-photo-pair';
+   [media.start,media.peak].forEach((src,i)=>{
+    const img=document.createElement('img');img.alt=EX[id][0]+(i===0?' 시작 자세':' 끝 자세');
+    img.decoding='async';img.loading='lazy';img.referrerPolicy='no-referrer';
+    img.onerror=()=>{
+     if(!img.dataset.backup){img.dataset.backup='1';img.src=pinnedPoseUrl(media.slug,i===0?1:3,true);return}
+     img.classList.add('broken');if([...pair.querySelectorAll('img')].every(x=>x.classList.contains('broken'))){pair.remove();el.classList.add('missing-poses')}
+    };
+    img.src=src;pair.appendChild(img);
+   });el.appendChild(pair);
+  }
+  if(photo){
+   const box=document.createElement('div');box.className='studio-photo-frame';
+   const img=document.createElement('img');img.alt=EX[id][0]+(photo.isAI?' AI 생성 참고 이미지':' 실제 운동 사진');
+   img.decoding='async';img.loading='lazy';img.referrerPolicy='no-referrer';
+   img.onerror=()=>{box.remove();el.querySelector('.media-switch button[data-view="photo"]')?.remove();switchMode('poses');};
+   img.src=photo.src;box.appendChild(img);
+   if(photo.url){
+    const credit=document.createElement('a');credit.className='photo-credit';
+    credit.href=photo.url;credit.target='_blank';credit.rel='noopener noreferrer';
+    credit.textContent='Pexels · '+photo.who+' ↗';box.appendChild(credit);
+   }
+   el.appendChild(box);
+  }
+  const controls=document.createElement('div');controls.className='media-switch';
+  if(photo){const btn=document.createElement('button');btn.type='button';btn.dataset.view='photo';btn.textContent='📷 실사';btn.onclick=()=>switchMode('photo');controls.appendChild(btn)}
+  if(media){const btn=document.createElement('button');btn.type='button';btn.dataset.view='poses';btn.textContent='↔ 시작·끝';btn.onclick=()=>switchMode('poses');controls.appendChild(btn)}
+  el.appendChild(controls);switchMode(photo?'photo':'poses');
  });
 }
-async function loadExerciseImages(){
- try{
-  const resp=await fetch('https://exercise-dataset.com/exercises.json',{mode:'cors'});
-  if(!resp.ok)throw Error('images API '+resp.status);
-  const json=await resp.json(),items=json.exercises||[];
-  Object.entries(PHOTO_ALIASES).forEach(([id,aliases])=>{
-   if(PINNED_IMAGE_IDS.has(id))return;
-   const item=matchExercise(items,aliases),media=item?.images?.flat;
-   if(!media)return;
-   const root='https://exercise-dataset.com/';
-   const clean=x=>x&&new URL(x,root).href;
-   IMAGES[id]={start:clean(media.start||media.main),peak:clean(media.peak||media.main)};
-  });
-  refreshFigures();
-  console.info('Exercise pictures mapped:',Object.keys(IMAGES).length);
- }catch(error){console.warn('Remote exercise images unavailable. Using offline illustration.',error)}
-}
-
+async function loadExerciseImages(){refreshFigures()}
 function drawDays(){
  const labels={mon:['월','상체 A'],tue:['화','하체 A'],thu:['목','상체 B'],fri:['금','하체 B'],sat:['토','전신']};
  $('days').innerHTML=Object.keys(PLAN).map(k=>{
